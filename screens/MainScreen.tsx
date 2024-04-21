@@ -131,6 +131,8 @@ const MainScreen: React.FC = () => {
   }, [setFromCurrency, setToCurrency, showFromDropdown, showToDropdown, toCurrency, fromCurrency]);
 
   const handleErrorClose = () => {
+    // force an update to the currency pair string to trigger a re-render
+    setStoreCurrencyPairString(`${fromCurrency}-${toCurrency}`);
     setShowErrorModal(false);
     setStoreCurrencyPairString(APP_DEFAULT_CURRENCY_PAIR);
   }

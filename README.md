@@ -20,4 +20,13 @@ A small demo on exchanging different currencies
 
   
 or visit [Web Version](http://localhost:8081)
- 
+
+Create static web
+
+```
+npx expo export --platform web
+
+npx serve dist
+
+```
+ [Static Web Version](http://localhost:3000)
