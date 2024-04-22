@@ -26,7 +26,7 @@ const CurrencyItem = styled.TouchableOpacity`
 
 const renderItem = ({ item }: { item: FlatCurrencyRate }, onSelect: (currency: FlatCurrencyRate) => void) => {
   return (
-    <CurrencyItem onPress={() => onSelect(item)}>
+    <CurrencyItem onPress={() => onSelect(item)} accessibilityLabel={`Currency ${item.name}`}>
       <CurrencyText>{`${item.symbol} - ${item.name} (${item.code})`}</CurrencyText>
       <CurrencyText>{`Rate: ${item.rate}`}</CurrencyText>
     </CurrencyItem>
@@ -45,7 +45,7 @@ export const DropdownModal: React.FC<DropdownModalProps> = ({ visible, onClose, 
 
   return (
     <Modal transparent={true} animationType="slide" visible={visible} onRequestClose={onClose}>
-      <ModalContainer>
+      <ModalContainer accessibilityLabel="Select currency">
         <ModalContent>
           <CloseButton onPress={onClose}>
             <CloseButtonText>X</CloseButtonText>

@@ -83,11 +83,7 @@ const MainScreen: React.FC = () => {
   }, [currencyPairString]);
 
   const getCurrencySymbol = (currencyCode: string) => {
-    if (currencyRates[currencyPairString.split("-")[0]]) {
-      return currencyRates[currencyPairString.split("-")[0]][currencyCode]?.symbol;
-    } else {
-      return "£";
-    }
+      return currencyRates[APP_DEFAULT_CURRENCY_PAIR.split("-")[0]][currencyCode]?.symbol || "£";
   };
   const formatValue = (type: "from" | "to", value: number, fromCurrency: string = "GBP", toCurrency: string = "USD") => {
     // taking into account the JPY currency which does not have decimal places
@@ -131,6 +127,7 @@ const MainScreen: React.FC = () => {
   }, [setFromCurrency, setToCurrency, showFromDropdown, showToDropdown, toCurrency, fromCurrency]);
 
   const handleErrorClose = () => {
+    // bug for GBP-GBP fix on initial load
     // force an update to the currency pair string to trigger a re-render
     setStoreCurrencyPairString(`${fromCurrency}-${toCurrency}`);
     setShowErrorModal(false);
@@ -142,7 +139,7 @@ const MainScreen: React.FC = () => {
       <Image source={splashImage} style={{ width: 80, height: 80 }} />
       <CurrencySelectArea>
         <BodyText>Swap From</BodyText>
-        <CurrencySelector currencyCode={fromCurrency} onPress={() => setShowFromDropdown(true)} />
+        <CurrencySelector currencyCode={fromCurrency} onPress={() => setShowFromDropdown(true)} toFrom="from" />
         <DropdownModal
           visible={showFromDropdown}
           onClose={() => {
@@ -153,7 +150,7 @@ const MainScreen: React.FC = () => {
         />
         <CurrencyInputContainer>
           <CurrencySymbol>{getCurrencySymbol(fromCurrency)}</CurrencySymbol>
-          <CurrencyInput placeholder="Amount" value={fromValue} onChangeText={(value) => handleValueChange(value, "from")} />
+          <CurrencyInput placeholder="Amount" value={fromValue} onChangeText={(value) => handleValueChange(value, "from")} accessibilityLabel={`swap from amount in ${fromCurrency} ${fromValue}`}/>
         </CurrencyInputContainer>
       </CurrencySelectArea>
       <CurrencySelectArea>
@@ -162,7 +159,7 @@ const MainScreen: React.FC = () => {
           {fromCurrency} {getCurrencySymbol(fromCurrency)}1 = {toCurrency} {getCurrencySymbol(toCurrency)}
           {rate.toFixed(4)}
         </BodyText>
-        <CurrencySelector currencyCode={toCurrency} onPress={() => setShowToDropdown(true)} />
+        <CurrencySelector currencyCode={toCurrency} onPress={() => setShowToDropdown(true)} toFrom="to" />
         <DropdownModal
           visible={showToDropdown}
           onClose={() => {
@@ -173,7 +170,7 @@ const MainScreen: React.FC = () => {
         />
         <CurrencyInputContainer>
           <CurrencySymbol>{getCurrencySymbol(toCurrency)}</CurrencySymbol>
-          <CurrencyInput placeholder="Amount" value={toValue} onChangeText={(value) => handleValueChange(value, "to")} />
+          <CurrencyInput placeholder="Amount" value={toValue} onChangeText={(value) => handleValueChange(value, "to")} accessibilityLabel={`swap to amount in ${toCurrency} ${toValue}`} />
         </CurrencyInputContainer>
       </CurrencySelectArea>
 
@@ -186,7 +183,7 @@ const MainScreen: React.FC = () => {
             </CloseButton>
             <Article>
               <TitleText>Invalid currency pair.</TitleText>
-              <BodyText>You cannot select the same currency for from and to. please select an alternative currency</BodyText>
+              <BodyText>You cannot select the same currency for From and To. Please select an alternative currency</BodyText>
             </Article>
           </ModalContent>
         </ModalContainer>

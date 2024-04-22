@@ -7,6 +7,7 @@ import { BodyText } from "../styles";
 type CurrencySelectorProps = {
   currencyCode: string;
   onPress: () => void;
+  toFrom?: "to" | "from";
 };
 
 const chevron = require("../assets/chevron.svg");
@@ -32,10 +33,10 @@ const FlagAndCurrency = styled.View`
   align-items: center;
 `;
 
-export const CurrencySelector: React.FC<CurrencySelectorProps> = ({ currencyCode, onPress }) => {
+export const CurrencySelector: React.FC<CurrencySelectorProps> = ({ currencyCode, onPress, toFrom  }) => {
   const imageSource = FLAGS[currencyCode];
   return (
-    <Container onPress={onPress}>
+    <Container onPress={onPress} accessibilityRole="button" accessibilityLabel={`Select currency to swap ${toFrom}`}>
       <FlagAndCurrency>
         <Image source={imageSource} style={{ width: 30, height: 24 }} />
         <CurrencyText>{currencyCode}</CurrencyText>
